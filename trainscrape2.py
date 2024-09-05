@@ -22,7 +22,7 @@ def insert_into_supabase(data):
 
 # Function to call the delete function in Supabase
 def delete_old_data():
-    url = f"{SUPABASE_URL}/rest/v1/rpc/delete_old_data"
+    url = f"{SUPABASE_URL}/rest/v1/delete_old_data"
     headers = {
         "apikey": SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",

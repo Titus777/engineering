@@ -20,10 +20,27 @@ def insert_into_supabase(data):
     else:
         print(f"Failed to insert data: {response.status_code}, {response.text}")
 
+# Function to call the delete function in Supabase
+def delete_old_data():
+    url = f"{SUPABASE_URL}/rest/v1/rpc/delete_old_data"
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+        "Content-Type": "application/json"
+    }
+    response = requests.post(url, headers=headers)
+    if response.status_code == 200:
+        print("Old data deleted successfully")
+    else:
+        print(f"Failed to delete old data: {response.status_code}, {response.text}")
+
 # URL of the webpage containing the HTML element
 url = "https://www.nationalrail.co.uk/status-and-disruptions/"
 
 try:
+    # Call the delete function before inserting new data
+    delete_old_data()
+    
     # Send a GET request to the URL
     response = requests.get(url)
     response.raise_for_status()  # Raise an exception for HTTP errors
@@ -41,9 +58,8 @@ try:
         # Iterate through each item and extract details
         i = 0
         for item in engineering_items:
-            #print(i)
             i = i+1
-            if i>=8:
+            if i >= 8:
                 # Extract the link
                 link = item.find("a").get("href") if item.find("a") else "No link available"
                 full_link = f"https://www.nationalrail.co.uk{link}"  # Prepend base URL if necessary
